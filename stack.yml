@@ -1,0 +1,29 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:8080
+functions:
+  cloudflare-dyndns:
+    lang: node-armhf
+    handler: ./cloudflare-dyndns
+    image: registry.home.grybkov.dev/openfaas-fn/cloudflare-dyndns:latest
+    annotations:
+      topic: cron-function
+      schedule: "*/1 * * * *"
+    secrets:
+      - cloudflare-api-key
+      - cloudflare-email
+    environment:
+      fprocess: node --no-deprecation index.js
+      # grybkov.dev
+      CF_ZONE_ID: 902df0eb57decfb8dd3e2c190b00bdd3
+      DOMAIN_NAME: home
+  cloudflare-zones:
+    lang: node-armhf
+    handler: ./cloudflare-zones
+    image: registry.home.grybkov.dev/openfaas-fn/cloudflare-zones:latest
+    secrets:
+      - cloudflare-api-key
+      - cloudflare-email
+    environment:
+      fprocess: node --no-deprecation index.js

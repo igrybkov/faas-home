@@ -1,0 +1,19 @@
+kind: pipeline
+type: kubernetes
+name: deploy
+
+steps:
+  - name: deploy
+    image: ubuntu
+    commands:
+    - apt-get update
+    - apt-get install -y curl bash git apt-transport-https ca-certificates gnupg-agent software-properties-common
+    - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+    - add-apt-repository "deb [arch=armhf] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    - apt-get update
+    - apt-get install -y docker-ce docker-ce-cli containerd.io
+    - service docker restart
+    - git clone https://github.com/igrybkov/faas-cloudflare-dyndns.git functions/cloudflare-dyndns
+    - curl -sSL https://cli.openfaas.com | sh
+    - sleep 3m
+    - OPENFAAS_URL=https://openfaas.home.grybkov.dev/ ./deploy.sh
