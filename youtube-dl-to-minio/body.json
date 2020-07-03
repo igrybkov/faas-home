@@ -1,0 +1,7 @@
+{
+    "url": "https://www.youtube.com/watch?v=5d6SEQQbwtU",
+    "bucket": "videos",
+    "dest": "/videos/igrybkov/youtube/",
+    "filename": "my-file.mp4",
+    "cmd": "ls -la"
+}
